@@ -1,0 +1,30 @@
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.5.2.0
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Catan.CLI", "Catan.CLI\Catan.CLI.csproj", "{E2584EE8-E3B0-119C-D79F-2B6D2FE595E3}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Catan.Core", "Catan.Core\Catan.Core.csproj", "{9198B3EE-4A6F-416A-3738-8AE140A4552F}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{E2584EE8-E3B0-119C-D79F-2B6D2FE595E3}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E2584EE8-E3B0-119C-D79F-2B6D2FE595E3}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E2584EE8-E3B0-119C-D79F-2B6D2FE595E3}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E2584EE8-E3B0-119C-D79F-2B6D2FE595E3}.Release|Any CPU.Build.0 = Release|Any CPU
+		{9198B3EE-4A6F-416A-3738-8AE140A4552F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{9198B3EE-4A6F-416A-3738-8AE140A4552F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{9198B3EE-4A6F-416A-3738-8AE140A4552F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{9198B3EE-4A6F-416A-3738-8AE140A4552F}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {26C12792-A954-43AA-8B38-FDBB9EF5F669}
+	EndGlobalSection
+EndGlobal
