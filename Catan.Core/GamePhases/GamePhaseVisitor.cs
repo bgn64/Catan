@@ -1,11 +1,11 @@
 namespace Catan.Core;
 
-public class GamePhaseVisitor : IGamePhaseVisitor
+public class GameSubphaseVisitor : IGameSubphaseVisitor
 {
     Action<InitialPlacementPhase> _initialPlacementPhaseAction;
     Action<MainGamePhase> _mainGamePhaseAction;
 
-    public GamePhaseVisitor(Action<InitialPlacementPhase> initialPlacementPhaseAction, Action<MainGamePhase> mainGamePhaseAction)
+    public GameSubphaseVisitor(Action<InitialPlacementPhase> initialPlacementPhaseAction, Action<MainGamePhase> mainGamePhaseAction)
     {
         _initialPlacementPhaseAction = initialPlacementPhaseAction;
         _mainGamePhaseAction = mainGamePhaseAction;

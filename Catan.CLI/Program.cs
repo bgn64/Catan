@@ -13,7 +13,7 @@ public class Program
 
         while (!isVisitorComplete)
         {
-            game.CurrentPhase.Accept(new GamePhaseVisitor(
+            game.CurrentPhase.Accept(new GameSubphaseVisitor(
                 initialPlacementPhase => {
                     initialPlacementPhase.CurrentPhase.Accept(new InitialPlacementSubphaseVisitor(
                         placeSettlementPhase => {

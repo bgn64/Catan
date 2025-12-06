@@ -2,8 +2,14 @@
 
 public class Game
 {
-    public GameSubphase CurrentPhase { get; }
+	public Game()
+	{
+		Board = new Board();
+		CurrentPhase = new InitialPlacementPhase();
+	}
 
-    public bool IsGameOver { get; internal set; }
+	public Board Board { get; private set; }
+
+    public GameSubphase CurrentPhase { get; private set; }
 }
 

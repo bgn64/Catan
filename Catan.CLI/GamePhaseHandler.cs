@@ -3,13 +3,13 @@ using System;
 
 namespace Catan.CLI;
 
-public class GamePhaseHandler : IGamePhaseVisitor
+public class GamePhaseHandler : IGameSubphaseVisitor
 {
-    InitialPlacementSubphaseHandler _initialPlacementSubphaseVisitor;
+    InitialPlacementSubphaseHandler _initialPlacementSubphaseHandler;
 
     public GamePhaseHandler()
     {
-        _initialPlacementSubphaseVisitor = new InitialPlacementSubphaseHandler();
+        _initialPlacementSubphaseHandler = new InitialPlacementSubphaseHandler();
         IsComplete = false;
     }
 
@@ -17,7 +17,7 @@ public class GamePhaseHandler : IGamePhaseVisitor
 
     public void Visit(InitialPlacementPhase phase)
     {
-        phase.CurrentPhase.Accept(_initialPlacementSubphaseVisitor);
+        phase.CurrentPhase.Accept(_initialPlacementSubphaseHandler);
     }
 
     public void Visit(MainGamePhase phase)
