@@ -2,6 +2,15 @@ namespace Catan.Core;
 
 public class Board
 {
+	Dictionary<Vertex, Settlement> _settlements;
+	Dictionary<Edge, Road> _roads;
+
+	internal Board()
+	{
+		_settlements = new Dictionary<Vertex, Settlement>();
+		_roads = new Dictionary<Edge, Road>();
+	}
+		
 	internal IEnumerable<Vertex> GetAdjacentVertices(Vertex vertex)
 	{
 		return new List<Vertex>();
@@ -9,31 +18,31 @@ public class Board
 
 	public bool HasSettlement(Vertex vertex)
 	{
-		return false;
+		return _settlements.ContainsKey(vertex);
 	}
 	
 	public bool HasSettlement(Vertex vertex, Player player)
 	{
-		return false;
+		return _settlements.TryGetValue(vertex, out Settlement? settlement) && settlement.Player == player;
 	}
 	
-	internal bool CanPlaceSettlement(Vertex vertex, Player player)
+	internal bool CanPlaceSettlement(Vertex vertex)
 	{
-		return false;
+		return !_settlements.ContainsKey(vertex);
 	}
 
-	internal bool PlaceSettlement(Vertex vertex, Player player)
+	internal bool TryPlaceSettlement(Vertex vertex, Settlement settlement)
 	{
-		return false;
+		return _settlements.TryAdd(vertex, settlement);
 	}
 	
-	internal bool CanPlaceRoad(Edge edge, Player player)
+	internal bool CanPlaceRoad(Edge edge)
 	{
-		return false;
+		return !_roads.ContainsKey(edge);
 	}
 
-	internal bool PlaceRoad(Edge edge, Player player)
+	internal bool TryPlaceRoad(Edge edge, Road road)
 	{
-		return false;
+		return _roads.TryAdd(edge, road);
 	}
 }

@@ -7,7 +7,7 @@ public class RollCommand : Command
 		return true;
 	}
 
-	protected override bool ExecuteCore(Game game)
+	protected override bool TryExecuteCore(Game game)
 	{
 		game.RollDice();
 

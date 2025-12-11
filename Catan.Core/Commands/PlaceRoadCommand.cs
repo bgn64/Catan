@@ -25,13 +25,15 @@ public class PlaceRoadCommand : Command
 	public override bool CanExecute(Game game)
 	{
 		return CanExecuteCore(game) &&
-			game.Board.CanPlaceRoad(Edge!, game.CurrentPlayer);
+			game.CanGetUnplayedRoad(game.CurrentPlayer) &&
+			game.Board.CanPlaceRoad(Edge!);
 	}
 
-	protected override bool ExecuteCore(Game game)
+	protected override bool TryExecuteCore(Game game)
 	{
 		return CanExecuteCore(game) &&
-			game.Board.PlaceRoad(Edge!, game.CurrentPlayer);
+			game.TryGetUnplayedRoad(game.CurrentPlayer, out Road? road) &&
+			game.Board.TryPlaceRoad(Edge!, road!);
 	}
 
 	public override void Accept(ICommandVisitor visitor)

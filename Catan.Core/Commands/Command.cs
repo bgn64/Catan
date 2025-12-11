@@ -11,11 +11,11 @@ public abstract class Command
 
 	public abstract bool CanExecute(Game game);
 
-	protected abstract bool ExecuteCore(Game game);
+	protected abstract bool TryExecuteCore(Game game);
 
-	public bool Execute(Game game)
+	public bool TryExecute(Game game)
 	{
-		if (!ExecuteCore(game))
+		if (!TryExecuteCore(game))
 		{
 			return false;
 		}
