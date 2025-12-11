@@ -3,37 +3,22 @@ using System;
 
 namespace Catan.CLI;
 
-public class CommandSelectionService : IGameSubphaseVisitor
+public class CommandSelectionService
 {
 	CommandNameProvider _commandNameProvider;
-	ICommand? _selectedCommand;
 
     public CommandSelectionService()
     {
 		_commandNameProvider = new CommandNameProvider();
     }
 
-	public ICommand? SelectCommand(Game game)
+	public Command? SelectCommand(Game game)
 	{
-		if (game.CurrentPhase == null)
-		{
-			return null;
-		}
-
-		game.CurrentPhase.Accept(this);
-
-		return _selectedCommand;
-	}
-
-	public void Visit(InitialRollPhase phase)
-	{
-		List<IInitialRollCommand> commands = phase.GetValidCommands().ToList();
+		List<Command> commands = game.GetValidCommands().ToList();
 
 		if (commands.Count == 0)
 		{
-			_selectedCommand = null;
-			
-			return;
+			return null;
 		}
 
 		Console.WriteLine("Valid commands:");
@@ -54,16 +39,6 @@ public class CommandSelectionService : IGameSubphaseVisitor
 			input = Console.ReadLine();
 		}
 
-		_selectedCommand = commands[index];
-	}
-
-    public void Visit(InitialPlacementPhase phase)
-    {
-		_selectedCommand = null;
-    }
-
-    public void Visit(MainGamePhase phase)
-    {
-		_selectedCommand = null;
-    }
+		return commands[index];
+	}	
 }

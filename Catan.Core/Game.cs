@@ -24,14 +24,13 @@ public class Game : ParentPhase<GameSubphase>
 		RedDie = new Die();
 		BlueDie = new Die();
 
-		_initialRollPhase = new InitialRollPhase(this);
-
 		foreach (Player player in _players)
 		{
 			_initialRolls.Add(player, new InitialRoll());
 		}
 
-		_initialPlacementPhase = new InitialPlacementPhase();
+		_initialRollPhase = new InitialRollPhase(this);
+		_initialPlacementPhase = new InitialPlacementPhase(this);
 		_mainGamePhase = new MainGamePhase();
 		
 		_initialRollPhase.PhaseComplete += InitialRollPhaseComplete;
@@ -40,6 +39,8 @@ public class Game : ParentPhase<GameSubphase>
 
 		CurrentPhase = _initialRollPhase; 
 	}
+
+	public new IEnumerable<Command> GetValidCommands() => base.GetValidCommands();
 
 	public IEnumerable<Player> Players => _players;
 

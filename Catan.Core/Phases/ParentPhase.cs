@@ -1,6 +1,6 @@
 namespace Catan.Core;
 
-public abstract class ParentPhase<TSubphase> where TSubphase : Phase
+public abstract class ParentPhase<TSubphase> : Phase where TSubphase : Phase
 {
 	private TSubphase? _currentPhase;
 	public TSubphase? CurrentPhase
@@ -14,5 +14,10 @@ public abstract class ParentPhase<TSubphase> where TSubphase : Phase
 				_currentPhase.OnPhaseStart();
 			}
 		}
+	}
+
+	internal override IEnumerable<Command> GetValidCommands()
+	{
+		return _currentPhase?.GetValidCommands() ?? new List<Command>();
 	}
 }

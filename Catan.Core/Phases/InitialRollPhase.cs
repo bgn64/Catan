@@ -17,9 +17,9 @@ public class InitialRollPhase : GameSubphase
 		_game.CurrentPlayer = _playersToRoll.First();
 	}
 
-	public IEnumerable<IInitialRollCommand> GetValidCommands()
+	internal override IEnumerable<Command> GetValidCommands()
 	{
-		if(RollCommand.CouldExecute(_game))
+		if (RollCommand.CouldExecute(_game))
 		{
 			RollCommand command = new RollCommand();
 			command.CommandComplete += RollCommandComplete;

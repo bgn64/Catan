@@ -12,4 +12,6 @@ public abstract class Phase
 	{
 		PhaseComplete?.Invoke(this, e);
 	}
+
+	internal abstract IEnumerable<Command> GetValidCommands();
 }

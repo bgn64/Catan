@@ -15,7 +15,7 @@ public class Program
 		
 		gamePrinter.Print(game);
 
-		ICommand? command = commandSelectionService.SelectCommand(game);
+		Command? command = commandSelectionService.SelectCommand(game);
 
         while (command != null)
         {

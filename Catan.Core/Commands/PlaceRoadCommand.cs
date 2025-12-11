@@ -1,7 +1,14 @@
 namespace Catan.Core;
 
-public class RollCommand : Command
+public class PlaceRoadCommand : Command
 {
+	Edge _edge;
+
+	public void SetEdge(Edge edge)
+	{
+		_edge = edge;
+	}
+
 	internal static bool CouldExecute(Game game)
 	{
 		if (game.CurrentPhase == null)
@@ -12,10 +19,9 @@ public class RollCommand : Command
 		bool ret = false;
 
 		game.CurrentPhase.Accept(new GameSubphaseVisitor(
-			initialRollPhase => ret = true,
-            initialPlacementPhase => ret = false, 
-            mainGamePhase => ret = false 
-        ));
+			initialRollPhase => ret = false,
+			initialPlacementPhase => ret = initialPlacementPhase.HasPlacedSettlement,
+			mainGamePhase => ret = false));
 
 		return ret;
 	}
@@ -27,7 +33,6 @@ public class RollCommand : Command
 
 	protected override void ExecuteCore(Game game)
 	{
-		game.RollDice();
 	}
 
 	public override void Accept(ICommandVisitor visitor)
