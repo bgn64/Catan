@@ -28,14 +28,14 @@ public class InitialPlacementPhase : GameSubphase
 
 	internal override IEnumerable<Command> GetValidCommands()
 	{
-		if (PlaceSettlementCommand.CouldExecute(_game))
+		if (!HasPlacedSettlement)
 		{
 			PlaceSettlementCommand command = new PlaceSettlementCommand();
 			command.CommandComplete += PlaceSettlementCommandComplete;
 			yield return command;
 		}
 		
-		if (PlaceRoadCommand.CouldExecute(_game))
+		if (HasPlacedSettlement)
 		{
 			PlaceRoadCommand command = new PlaceRoadCommand();
 			command.CommandComplete += PlaceRoadCommandComplete;

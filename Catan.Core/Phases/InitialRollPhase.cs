@@ -19,12 +19,9 @@ public class InitialRollPhase : GameSubphase
 
 	internal override IEnumerable<Command> GetValidCommands()
 	{
-		if (RollCommand.CouldExecute(_game))
-		{
-			RollCommand command = new RollCommand();
-			command.CommandComplete += RollCommandComplete;
-			yield return command;
-		}
+		RollCommand command = new RollCommand();
+		command.CommandComplete += RollCommandComplete;
+		yield return command;
 	}
 
 	void RollCommandComplete(object? sender, EventArgs e)

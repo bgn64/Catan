@@ -2,37 +2,36 @@ namespace Catan.Core;
 
 public class PlaceRoadCommand : Command
 {
-	Edge _edge;
+	public Edge? Edge { get; set; }	
 
-	public void SetEdge(Edge edge)
+	bool CanExecuteCore(Game game)
 	{
-		_edge = edge;
-	}
-
-	internal static bool CouldExecute(Game game)
-	{
-		if (game.CurrentPhase == null)
+		if (Edge == null)
 		{
 			return false;
 		}
 
-		bool ret = false;
+		foreach (Vertex vertex in Edge.Vertices)
+		{
+			if (game.Board.HasSettlement(vertex, game.CurrentPlayer))
+			{
+				return true;
+			}
+		}
 
-		game.CurrentPhase.Accept(new GameSubphaseVisitor(
-			initialRollPhase => ret = false,
-			initialPlacementPhase => ret = initialPlacementPhase.HasPlacedSettlement,
-			mainGamePhase => ret = false));
-
-		return ret;
+		return false;
 	}
 
 	public override bool CanExecute(Game game)
 	{
-		return CouldExecute(game);
+		return CanExecuteCore(game) &&
+			game.Board.CanPlaceRoad(Edge!, game.CurrentPlayer);
 	}
 
-	protected override void ExecuteCore(Game game)
+	protected override bool ExecuteCore(Game game)
 	{
+		return CanExecuteCore(game) &&
+			game.Board.PlaceRoad(Edge!, game.CurrentPlayer);
 	}
 
 	public override void Accept(ICommandVisitor visitor)

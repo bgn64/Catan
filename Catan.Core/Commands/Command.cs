@@ -11,17 +11,19 @@ public abstract class Command
 
 	public abstract bool CanExecute(Game game);
 
-	protected abstract void ExecuteCore(Game game);
+	protected abstract bool ExecuteCore(Game game);
 
-	public void Execute(Game game)
+	public bool Execute(Game game)
 	{
-		if(!CanExecute(game))
+		if (!ExecuteCore(game))
 		{
-			return;
+			return false;
 		}
 
-		ExecuteCore(game);
+
 		OnCommandComplete(EventArgs.Empty);
+
+		return true;
 	}
 
 	public abstract void Accept(ICommandVisitor visitor);
