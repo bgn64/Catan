@@ -22,6 +22,6 @@ public class Die
 
 	public void Roll()
 	{
-		Value = _random.Next(1, 6);	
+		Value = _random.Next(1, 7);	
 	}
 }

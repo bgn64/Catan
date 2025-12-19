@@ -1,6 +1,6 @@
 namespace Catan.Core;
 
-public abstract class Command : ICommand
+public abstract class Command
 {
 	internal event EventHandler? CommandComplete;
 
@@ -11,16 +11,20 @@ public abstract class Command : ICommand
 
 	public abstract bool CanExecute(Game game);
 
-	protected abstract void ExecuteCore(Game game);
+	protected abstract bool TryExecuteCore(Game game);
 
-	public void Execute(Game game)
+	public bool TryExecute(Game game)
 	{
-		if(!CanExecute(game))
+		if (!TryExecuteCore(game))
 		{
-			return;
+			return false;
 		}
 
-		ExecuteCore(game);
+
 		OnCommandComplete(EventArgs.Empty);
+
+		return true;
 	}
+
+	public abstract void Accept(ICommandVisitor visitor);
 }

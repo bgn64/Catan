@@ -1,5 +1,5 @@
 namespace Catan.Core;
 
-public class Board
+public class Hex
 {
 }

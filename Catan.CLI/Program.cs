@@ -7,24 +7,33 @@ public class Program
 {
     public static void Main(string[] args)
     {
-		Console.WriteLine(Guid.NewGuid());
         Console.WriteLine("Starting Catan game!");
         Game game = new Game();
-		GamePrinter gamePrinter = new GamePrinter();
-		CommandSelectionService commandSelectionService = new CommandSelectionService();
-		
-		gamePrinter.Print(game);
+        IHexToStringConverter hexToStringConverter = new ResourceToStringConverter(game);
+        IVertexToStringConverter vertexToStringConverter = new SettlementToStringConverter(game);
+        IEdgeToStringConverter edgeToStringConverter = new RoadToStringConverter(game);
+        BoardToStringConverter boardToStringConverter = new BoardToStringConverter(hexToStringConverter, vertexToStringConverter, edgeToStringConverter);
+        GamePrinter gamePrinter = new GamePrinter(boardToStringConverter);
+        IVertexProvider vertexProvider = new CLIVertexSelector(game, boardToStringConverter);
+        IEdgeProvider edgeProvider = new CLIEdgeSelector(game, boardToStringConverter);
+        ICommandConfigurationService commandConfigurationService = new CommandConfigurationService(game, vertexProvider, edgeProvider);
+        ICommandProvider commandProvider = new CLICommandSelector(game, commandConfigurationService);
 
-		ICommand? command = commandSelectionService.SelectCommand(game);
+        gamePrinter.Print(game);
+
+        Command? command = commandProvider.GetCommand();
 
         while (command != null)
         {
-			command.Execute(game);
-			gamePrinter.Print(game);
+            if (!command.TryExecute(game)) 
+            {
+                Console.WriteLine("Failed to execute command.");
+            }
 
-			command = commandSelectionService.SelectCommand(game);
+            gamePrinter.Print(game);
+            command = commandProvider.GetCommand();
         }
 
-		Console.WriteLine("Failed to get command, exiting...");
+        Console.WriteLine("Failed to get command, exiting...");
     }
 }
