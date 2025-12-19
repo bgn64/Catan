@@ -1,158 +1,162 @@
 ﻿namespace Catan.Core;
 
-public class Game : ParentPhase<GameSubphase>
+public class Game
 {
-	List<Player> _players;
-	Dictionary<Player, InitialRoll> _initialRolls;
-	Dictionary<Player, int> _unplayedSettlements;
-	Dictionary<Player, int> _unplayedRoads;
+    List<Player> _players;
+    Dictionary<Player, InitialRoll> _initialRolls;
+    Dictionary<Player, int> _unplayedSettlements;
+    Dictionary<Player, int> _unplayedRoads;
 
-	InitialRollPhase _initialRollPhase;
-	InitialPlacementPhase _initialPlacementPhase;
-	MainGamePhase _mainGamePhase;
+    InitialRollPhase _initialRollPhase;
+    InitialPlacementPhase _initialPlacementPhase;
+    MainGamePhase _mainGamePhase;
 
-	public Game()
-	{
-		_players = new List<Player>();
-		_players.Add(new Player());
-		_players.Add(new Player());
-		_players.Add(new Player());
-		_players.Add(new Player());
-		
-		CurrentPlayer = _players.First();
+    public Game()
+    {
+        _players = new List<Player>();
+        _players.Add(new Player());
+        _players.Add(new Player());
+        _players.Add(new Player());
+        _players.Add(new Player());
 
-		_initialRolls = new Dictionary<Player, InitialRoll>();
+        CurrentPlayer = _players.First();
 
-		Board = new Board();
-		RedDie = new Die();
-		BlueDie = new Die();
+        _initialRolls = new Dictionary<Player, InitialRoll>();
 
-		foreach (Player player in _players)
-		{
-			_initialRolls.Add(player, new InitialRoll());
-		}
+        Board = new Board();
+        RedDie = new Die();
+        BlueDie = new Die();
 
-		_unplayedSettlements = new Dictionary<Player, int>();
+        foreach (Player player in _players)
+        {
+            _initialRolls.Add(player, new InitialRoll());
+        }
 
-		foreach (Player player in _players)
-		{
-			_unplayedSettlements.Add(player, 5);
-		}
+        _unplayedSettlements = new Dictionary<Player, int>();
 
-		_unplayedRoads = new Dictionary<Player, int>();
+        foreach (Player player in _players)
+        {
+            _unplayedSettlements.Add(player, 5);
+        }
 
-		foreach (Player player in _players)
-		{
-			_unplayedRoads.Add(player, 13);
-		}
+        _unplayedRoads = new Dictionary<Player, int>();
 
-		_initialRollPhase = new InitialRollPhase(this);
-		_initialPlacementPhase = new InitialPlacementPhase(this);
-		_mainGamePhase = new MainGamePhase();
-		
-		_initialRollPhase.PhaseComplete += InitialRollPhaseComplete;
-		_initialPlacementPhase.PhaseComplete += InitialPlacementPhaseComplete;
-		_mainGamePhase.PhaseComplete += MainGamePhaseComplete;
+        foreach (Player player in _players)
+        {
+            _unplayedRoads.Add(player, 13);
+        }
 
-		CurrentPhase = _initialRollPhase; 
-	}
+        _initialRollPhase = new InitialRollPhase(this);
+        _initialPlacementPhase = new InitialPlacementPhase(this);
+        _mainGamePhase = new MainGamePhase();
 
-	public new IEnumerable<Command> GetValidCommands() => base.GetValidCommands();
+        _initialRollPhase.Complete += InitialRollPhaseCompletedEventHandler;
+        _initialPlacementPhase.Complete += InitialPlacementPhaseCompletedEventHandler;
+        _mainGamePhase.Complete += MainGamePhaseCompletedEventHandler;
 
-	public IEnumerable<Player> Players => _players;
+        CurrentPhase = _initialRollPhase; 
+    }
 
-	public Player CurrentPlayer { get; internal set; }
+    public IGameSubphase? CurrentPhase { get; private set; }
 
-	public IReadOnlyDictionary<Player, InitialRoll> InitialRolls => _initialRolls;
+    public IEnumerable<Command> GetValidCommands() => CurrentPhase?.GetValidCommands() ?? new List<Command>();
 
-	public Board Board { get; private set; }
+    public IEnumerable<Player> Players => _players;
 
-	public Die RedDie { get; private set; }
+    public Player CurrentPlayer { get; internal set; }
 
-	public Die BlueDie { get; private set; }
+    public IReadOnlyDictionary<Player, InitialRoll> InitialRolls => _initialRolls;
 
-	public IReadOnlyDictionary<Player, int> UnplayedSettlements => _unplayedSettlements;
-	
-	public IReadOnlyDictionary<Player, int> UnplayedRoads => _unplayedRoads;
+    public Board Board { get; private set; }
 
-	internal void RollDice()
-	{
-		RedDie.Roll();
-		BlueDie.Roll();
-	}
+    public Die RedDie { get; private set; }
 
-	internal void AddInitialRoll(Player player, Die roll)
-	{
-		_initialRolls[player].AddRoll(roll);
-	}
+    public Die BlueDie { get; private set; }
 
-	bool CanGetUnplayedSettlementCore(Player player)
-	{
-		return _unplayedSettlements[player] > 0;
-	}
+    public IReadOnlyDictionary<Player, int> UnplayedSettlements => _unplayedSettlements;
 
-	internal bool CanGetUnplayedSettlement(Player player)
-	{
-		return CanGetUnplayedSettlementCore(player);
-	}
+    public IReadOnlyDictionary<Player, int> UnplayedRoads => _unplayedRoads;
 
-	internal bool TryGetUnplayedSettlement(Player player, out Settlement? settlement)
-	{
-		if (CanGetUnplayedSettlementCore(player))
-		{
-			_unplayedSettlements[player]--;
-			settlement = new Settlement(player);
+    internal void RollDice()
+    {
+        RedDie.Roll();
+        BlueDie.Roll();
+    }
 
-			return true;
-		}
-		else
-		{
-			settlement = null;
+    internal void AddInitialRoll(Player player, Die roll)
+    {
+        _initialRolls[player].AddRoll(roll);
+    }
 
-			return false;
-		}
-	}	
-	
-	bool CanGetUnplayedRoadCore(Player player)
-	{
-		return _unplayedRoads[player] > 0;
-	}
+    bool CanGetUnplayedSettlementCore(Player player)
+    {
+        return _unplayedSettlements[player] > 0;
+    }
 
-	internal bool CanGetUnplayedRoad(Player player)
-	{
-		return CanGetUnplayedRoadCore(player);
-	}
+    internal bool CanGetUnplayedSettlement(Player player)
+    {
+        return CanGetUnplayedSettlementCore(player);
+    }
 
-	internal bool TryGetUnplayedRoad(Player player, out Road? road)
-	{
-		if (CanGetUnplayedRoadCore(player))
-		{
-			_unplayedRoads[player]--;
-			road = new Road(player);
+    internal bool TryGetUnplayedSettlement(Player player, out Settlement? settlement)
+    {
+        if (CanGetUnplayedSettlementCore(player))
+        {
+            _unplayedSettlements[player]--;
+            settlement = new Settlement(player);
 
-			return true;
-		}
-		else
-		{
-			road = null;
+            return true;
+        }
+        else
+        {
+            settlement = null;
 
-			return false;
-		}
-	}	
-	
-	void InitialRollPhaseComplete(object? sender, EventArgs e)
-	{
-		CurrentPhase = _initialPlacementPhase;
-	}
+            return false;
+        }
+    }	
 
-	void InitialPlacementPhaseComplete(object? sender, EventArgs e)
-	{
-		CurrentPhase = _mainGamePhase;
-	}
+    bool CanGetUnplayedRoadCore(Player player)
+    {
+        return _unplayedRoads[player] > 0;
+    }
 
-	void MainGamePhaseComplete(object? sender, EventArgs e)
-	{
-		CurrentPhase = null;
-	}
+    internal bool CanGetUnplayedRoad(Player player)
+    {
+        return CanGetUnplayedRoadCore(player);
+    }
+
+    internal bool TryGetUnplayedRoad(Player player, out Road? road)
+    {
+        if (CanGetUnplayedRoadCore(player))
+        {
+            _unplayedRoads[player]--;
+            road = new Road(player);
+
+            return true;
+        }
+        else
+        {
+            road = null;
+
+            return false;
+        }
+    }	
+
+    void InitialRollPhaseCompletedEventHandler(object? sender, EventArgs e)
+    {
+        CurrentPhase = _initialPlacementPhase;
+        _initialPlacementPhase.Start();
+    }
+
+    void InitialPlacementPhaseCompletedEventHandler(object? sender, EventArgs e)
+    {
+        CurrentPhase = _mainGamePhase;
+        _mainGamePhase.Start();
+    }
+
+    void MainGamePhaseCompletedEventHandler(object? sender, EventArgs e)
+    {
+        CurrentPhase = null;
+    }
 }
 

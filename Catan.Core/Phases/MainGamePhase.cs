@@ -1,14 +1,20 @@
 namespace Catan.Core;
 
-public class MainGamePhase : GameSubphase
-{
-	internal override IEnumerable<Command> GetValidCommands()
-	{
-		return new List<Command>();
-	}
+public class MainGamePhase : IGameSubphase
+{ 
+    internal void Start()
+    {
+    }
 
-	public override void Accept(IGameSubphaseVisitor visitor)
-	{
-		visitor.Visit(this);
-	}
+    internal event EventHandler? Complete;
+
+    public void Accept(IGameSubphaseVisitor visitor)
+    {
+        visitor.Visit(this);
+    }
+
+    public IEnumerable<Command> GetValidCommands()
+    {
+        return new List<Command>();
+    }
 }
