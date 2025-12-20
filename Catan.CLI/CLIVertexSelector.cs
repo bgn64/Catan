@@ -4,24 +4,22 @@ namespace Catan.CLI;
 
 public class CLIVertexSelector : IVertexProvider, IVertexToStringConverter
 {
-    Game _game;
     IVertexToStringConverter _vertexToStringConverter;
     BoardToStringConverter _boardToStringConverter;
     List<FlatTopCoordinate> _vertices;
 
-    public CLIVertexSelector(Game game, BoardToStringConverter boardToStringConverter)
+    public CLIVertexSelector(BoardToStringConverter boardToStringConverter)
     {
-        _game = game;
         _vertexToStringConverter = boardToStringConverter.VertexToStringConverter;
         _boardToStringConverter = boardToStringConverter.WithVertexToStringConverter(this);
         _vertices = new List<FlatTopCoordinate>();
     }
 
-    public FlatTopCoordinate GetVertex()
+    public FlatTopCoordinate GetVertex(Board board)
     {
-        _vertices = _game.Board.GetHexVertexCoordinates().ToList();
+        _vertices = board.GetHexVertexCoordinates().ToList();
 
-        Console.WriteLine(_boardToStringConverter.ToString(_game, 3, 9));
+        Console.WriteLine(_boardToStringConverter.ToString(board, 3, 9));
         Console.WriteLine($"Please select a vertex index or 'n' to cycle through vertices: ");
 
         string? input = Console.ReadLine();
@@ -38,7 +36,7 @@ public class CLIVertexSelector : IVertexProvider, IVertexToStringConverter
                     _vertices.Add(coordinate);
                 }
 
-                Console.WriteLine(_boardToStringConverter.ToString(_game, 3, 9));
+                Console.WriteLine(_boardToStringConverter.ToString(board, 3, 9));
                 Console.WriteLine($"Please select a vertex index or 'n' to cycle through vertices: ");
                 input = Console.ReadLine();
             }
@@ -52,7 +50,7 @@ public class CLIVertexSelector : IVertexProvider, IVertexToStringConverter
         return _vertices[index];
     }
 
-    public string ToString(FlatTopCoordinate vertex)
+    public string ToString(FlatTopCoordinate vertex, Board board)
     {
         int vertexIndex = _vertices.IndexOf(vertex);
 
@@ -62,7 +60,7 @@ public class CLIVertexSelector : IVertexProvider, IVertexToStringConverter
         }
         else 
         {
-            return _vertexToStringConverter.ToString(vertex);
+            return _vertexToStringConverter.ToString(vertex, board);
         }
     }
 }

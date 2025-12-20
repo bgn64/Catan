@@ -14,7 +14,7 @@ public class GamePrinter
         _gameSubphasePrinter = new GameSubphasePrinter(1);
     }
 
-    public void Print(Game game)
+    public void Print(Game game, int sideEdgeSize, int flatEdgeSize)
     {
         Console.WriteLine($"Players.Count: {game.Players.Count()}");
         Console.WriteLine($"CurrentPlayer.Id: {game.CurrentPlayer.Id}");
@@ -25,7 +25,7 @@ public class GamePrinter
 
         _gameSubphasePrinter.Print(game.CurrentPhase);
 
-        Console.WriteLine(_boardToStringConverter.ToString(game, 3, 9));
+        Console.WriteLine(_boardToStringConverter.ToString(game.Board, sideEdgeSize, flatEdgeSize));
     }
 
     void PrintInitialRolls(Game game)

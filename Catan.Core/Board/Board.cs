@@ -89,15 +89,7 @@ public class Board
     {
         road = null;
 
-        Console.WriteLine("foreach (Edge e in _roads.Keys):");
-        foreach (Edge e in _roads.Keys)
-        {
-            Console.WriteLine($"{e}.Equals({edge}: {e.Equals(edge)}");
-        }
-
-        bool ret = _roads.TryGetValue(edge, out road);
-        Console.WriteLine($"_roads.TryGetValue(edge, out road): {ret}");
-        return ret;
+        return _roads.TryGetValue(edge, out road);
     }	
 
     internal bool CanPlaceRoad(Edge edge)
@@ -107,21 +99,7 @@ public class Board
 
     internal bool TryPlaceRoad(Edge edge, Road road)
     {
-        Console.WriteLine("Pre-add roads:");
-        foreach (Edge e in _roads.Keys)
-        {
-            Console.WriteLine(e);
-        }
-
-        bool ret = _roads.TryAdd(edge, road);
-
-        Console.WriteLine("Post-add roads:");
-        foreach (Edge e in _roads.Keys)
-        {
-            Console.WriteLine(e);
-        }
-
-        return ret;
+        return _roads.TryAdd(edge, road);
     }
 
     public bool IsHexCoordinate(FlatTopCoordinate coordinate)

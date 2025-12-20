@@ -4,20 +4,18 @@ namespace Catan.CLI;
 
 public class CLIEdgeSelector : IEdgeProvider, IVertexToStringConverter
 {
-    Game _game;
     IVertexToStringConverter _vertexToStringConverter;
     BoardToStringConverter _boardToStringConverter;
     List<FlatTopCoordinate> _vertices;
 
-    public CLIEdgeSelector(Game game, BoardToStringConverter boardToStringConverter)
+    public CLIEdgeSelector(BoardToStringConverter boardToStringConverter)
     {
-        _game = game;
         _vertexToStringConverter = boardToStringConverter.VertexToStringConverter;
         _boardToStringConverter = boardToStringConverter.WithVertexToStringConverter(this);
         _vertices = new List<FlatTopCoordinate>();
     }
 
-    public Edge GetEdge()
+    public Edge GetEdge(Board board)
     {
         FlatTopCoordinate? firstVertex = null;
         FlatTopCoordinate? secondVertex = null;
@@ -25,9 +23,9 @@ public class CLIEdgeSelector : IEdgeProvider, IVertexToStringConverter
 
         do
         {
-            _vertices = _game.Board.GetHexVertexCoordinates().ToList();
+            _vertices = board.GetHexVertexCoordinates().ToList();
 
-            Console.WriteLine(_boardToStringConverter.ToString(_game, 3, 9));
+            Console.WriteLine(_boardToStringConverter.ToString(board, 3, 9));
             Console.WriteLine($"Please select the first vertex index or 'n' to cycle through vertices: ");
 
             string? input = Console.ReadLine();
@@ -44,7 +42,7 @@ public class CLIEdgeSelector : IEdgeProvider, IVertexToStringConverter
                         _vertices.Add(coordinate);
                     }
 
-                    Console.WriteLine(_boardToStringConverter.ToString(_game, 3, 9));
+                    Console.WriteLine(_boardToStringConverter.ToString(board, 3, 9));
                     Console.WriteLine($"Please select the first vertex index or 'n' to cycle through vertices: ");
                     input = Console.ReadLine();
                 }
@@ -58,7 +56,7 @@ public class CLIEdgeSelector : IEdgeProvider, IVertexToStringConverter
             firstVertex = _vertices[index];
             _vertices.RemoveAt(index);
 
-            Console.WriteLine(_boardToStringConverter.ToString(_game, 3, 9));
+            Console.WriteLine(_boardToStringConverter.ToString(board, 3, 9));
             Console.WriteLine($"Please select the second vertex index for the edge or 'n' to cycle through the vertices: ");
 
             input = Console.ReadLine();
@@ -74,7 +72,7 @@ public class CLIEdgeSelector : IEdgeProvider, IVertexToStringConverter
                         _vertices.Add(coordinate);
                     }
 
-                    Console.WriteLine(_boardToStringConverter.ToString(_game, 3, 9));
+                    Console.WriteLine(_boardToStringConverter.ToString(board, 3, 9));
                     Console.WriteLine($"Please select the second vertex index or 'n' to cycle through vertices: ");
                     input = Console.ReadLine();
                 }
@@ -87,14 +85,14 @@ public class CLIEdgeSelector : IEdgeProvider, IVertexToStringConverter
 
             secondVertex = _vertices[index];
         }
-        while (!Edge.TryGetEdge(_game.Board, firstVertex, secondVertex, out edge));
+        while (!Edge.TryGetEdge(board, firstVertex, secondVertex, out edge));
 
         Console.WriteLine($"Selected edge {firstVertex}, {secondVertex}");
 
         return edge!;
     }
 
-    public string ToString(FlatTopCoordinate vertex)
+    public string ToString(FlatTopCoordinate vertex, Board board)
     {
         int vertexIndex = _vertices.IndexOf(vertex);
 
@@ -104,7 +102,7 @@ public class CLIEdgeSelector : IEdgeProvider, IVertexToStringConverter
         }
         else 
         {
-            return _vertexToStringConverter.ToString(vertex);
+            return _vertexToStringConverter.ToString(vertex, board);
         } 
     }
 }

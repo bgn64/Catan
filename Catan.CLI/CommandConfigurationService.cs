@@ -2,35 +2,21 @@ using Catan.Core;
 
 namespace Catan.CLI;
 
-public class CommandConfigurationService : ICommandConfigurationService, ICommandVisitor
+public class CommandConfigurationService : ICommandConfigurationService
 {
-    Game _game;
     IVertexProvider _vertexProvider;
     IEdgeProvider _edgeProvider;
 
-    public CommandConfigurationService(Game game, IVertexProvider vertexProvider, IEdgeProvider edgeProvider)
+    public CommandConfigurationService(IVertexProvider vertexProvider, IEdgeProvider edgeProvider)
     {
-        _game = game;
         _vertexProvider = vertexProvider;
         _edgeProvider = edgeProvider;
     }
 
-    public void ConfigureCommand(Command command)
+    public void ConfigureCommand(Command command, Game game)
     {
-        command.Accept(this);
-    }
-
-    public void Visit(RollCommand command)
-    {
-    }
-
-    public void Visit(PlaceSettlementCommand command)
-    {
-        command.Coordinate = _vertexProvider.GetVertex();
-    }
-
-    public void Visit(PlaceRoadCommand command)
-    {
-        command.Edge = _edgeProvider.GetEdge();
+        command.Accept(new CommandVisitor(rollCommand => {},
+                    placeSettlementCommand => placeSettlementCommand.Coordinate = _vertexProvider.GetVertex(game.Board),
+                    placeRoadCommand => placeRoadCommand.Edge = _edgeProvider.GetEdge(game.Board)));
     }
 }

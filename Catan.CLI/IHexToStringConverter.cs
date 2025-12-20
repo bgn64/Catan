@@ -4,30 +4,30 @@ namespace Catan.CLI;
 
 public interface IHexToStringConverter
 {
-  string TopLeftToString(FlatTopCoordinate hex,
-      int sideEdgeSize, int flatEdgeSize, int sideEdgeIndex);
+    string TopLeftToString(FlatTopCoordinate hex,
+            int sideEdgeSize, int flatEdgeSize, int sideEdgeIndex, Board board);
 
-  string TopRightToString(FlatTopCoordinate hex,
-      int sideEdgeSize, int sideEdgeIndex);
- 
-  string MiddleLeftToString(FlatTopCoordinate hex,
-      int sideEdgeSize, int flatEdgeSize);
+    string TopRightToString(FlatTopCoordinate hex,
+            int sideEdgeSize, int sideEdgeIndex, Board board);
 
-  string MiddleRightToString(FlatTopCoordinate coordinate,
-      int sideEdgeSize);
+    string MiddleLeftToString(FlatTopCoordinate hex,
+            int sideEdgeSize, int flatEdgeSize, Board board);
 
-  string BottomLeftToString(FlatTopCoordinate hex,
-      int sideEdgeSize, int flatEdgeSize, int sideEdgeIndex);
+    string MiddleRightToString(FlatTopCoordinate coordinate,
+            int sideEdgeSize, Board board);
 
-  string BottomRightToString(FlatTopCoordinate hex,
-      int sideEdgeSize, int sideEdgeIndex);
+    string BottomLeftToString(FlatTopCoordinate hex,
+            int sideEdgeSize, int flatEdgeSize, int sideEdgeIndex, Board board);
 
-  string TopToString(FlatTopCoordinate hex,
-      int sideEdgeSize, int flatEdgeSize, int sideEdgeIndex);
-  
-  string MiddleToString(FlatTopCoordinate hex,
-      int sideEdgeSize, int flatEdgeSize);
+    string BottomRightToString(FlatTopCoordinate hex,
+            int sideEdgeSize, int sideEdgeIndex, Board board);
 
-  abstract string BottomToString(FlatTopCoordinate hex,
-      int sideEdgeSize, int flatEdgeSize, int sideEdgeIndex);
+    string TopToString(FlatTopCoordinate hex,
+            int sideEdgeSize, int flatEdgeSize, int sideEdgeIndex, Board board);
+
+    string MiddleToString(FlatTopCoordinate hex,
+            int sideEdgeSize, int flatEdgeSize, Board board);
+
+    abstract string BottomToString(FlatTopCoordinate hex,
+            int sideEdgeSize, int flatEdgeSize, int sideEdgeIndex, Board board);
 }

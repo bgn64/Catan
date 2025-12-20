@@ -35,10 +35,10 @@ public class BoardToStringConverter : IBoardToStringConverter
         return new BoardToStringConverter(HexToStringConverter, VertexToStringConverter, edgeToStringConverter);
     }
 
-    FlatTopCoordinate GetTopLeft(Game game)
+    FlatTopCoordinate GetTopLeft(Board board)
     {
-        FlatTopCoordinate topmost = FlatTopCoordinate.GetTopMost(game.Board.GetHexCoordinates());
-        FlatTopCoordinate leftmost = FlatTopCoordinate.GetLeftMost(game.Board.GetHexCoordinates());
+        FlatTopCoordinate topmost = FlatTopCoordinate.GetTopMost(board.GetHexCoordinates());
+        FlatTopCoordinate leftmost = FlatTopCoordinate.GetLeftMost(board.GetHexCoordinates());
         FlatTopCoordinate topLeft = topmost;
 
         while (topLeft.IsRightOf(leftmost))
@@ -49,12 +49,12 @@ public class BoardToStringConverter : IBoardToStringConverter
         return topLeft;
     }
 
-    public string ToString(Game game, int sideEdgeSize, int flatEdgeSize)
+    public string ToString(Board board, int sideEdgeSize, int flatEdgeSize)
     {
         StringBuilder builder = new StringBuilder();
-        FlatTopCoordinate topLeftBoardHex = GetTopLeft(game);
-        FlatTopCoordinate rightMostBoardHex = FlatTopCoordinate.GetRightMost(game.Board.GetHexCoordinates());
-        FlatTopCoordinate bottomMostBoardHex = FlatTopCoordinate.GetBottomMost(game.Board.GetHexCoordinates());
+        FlatTopCoordinate topLeftBoardHex = GetTopLeft(board);
+        FlatTopCoordinate rightMostBoardHex = FlatTopCoordinate.GetRightMost(board.GetHexCoordinates());
+        FlatTopCoordinate bottomMostBoardHex = FlatTopCoordinate.GetBottomMost(board.GetHexCoordinates());
         rightMostBoardHex = rightMostBoardHex.Add0Deg().Add0Deg().Add0Deg();
         bottomMostBoardHex = bottomMostBoardHex.Add300Deg().Add240Deg();
         FlatTopCoordinate rowStartHex = topLeftBoardHex;
@@ -69,18 +69,18 @@ public class BoardToStringConverter : IBoardToStringConverter
                 FlatTopCoordinate topLeftVertex = currentHex.Add120Deg();
                 FlatTopCoordinate topRightHex = topRightVertex.Add0Deg();
                 FlatTopCoordinate topLeftHex = topLeftVertex.Add180Deg();
-                Edge.TryGetEdge(game.Board, topLeftVertex, topRightVertex, out Edge? topEdge);
+                Edge.TryGetEdge(board, topLeftVertex, topRightVertex, out Edge? topEdge);
 
                 if (topEdge == null)
                 {
                     return "Failed to print board.";
                 }
 
-                builder.Append(HexToStringConverter.MiddleRightToString(topLeftHex, sideEdgeSize));
-                builder.Append(VertexToStringConverter.ToString(topLeftVertex));
-                builder.Append(EdgeToStringConverter.FlatEdgeToString(topEdge, flatEdgeSize));
-                builder.Append(VertexToStringConverter.ToString(topRightVertex));
-                builder.Append(HexToStringConverter.MiddleLeftToString(topRightHex, sideEdgeSize, flatEdgeSize));
+                builder.Append(HexToStringConverter.MiddleRightToString(topLeftHex, sideEdgeSize, board));
+                builder.Append(VertexToStringConverter.ToString(topLeftVertex, board));
+                builder.Append(EdgeToStringConverter.FlatEdgeToString(topEdge, flatEdgeSize, board));
+                builder.Append(VertexToStringConverter.ToString(topRightVertex, board));
+                builder.Append(HexToStringConverter.MiddleLeftToString(topRightHex, sideEdgeSize, flatEdgeSize, board));
 
                 currentHex = currentHex.Add0Deg().Add0Deg().Add0Deg();
             }
@@ -99,19 +99,19 @@ public class BoardToStringConverter : IBoardToStringConverter
                     FlatTopCoordinate leftVertex = currentHex.Add180Deg();
                     FlatTopCoordinate topRightHex = topRightVertex.Add0Deg();
                     FlatTopCoordinate topLeftHex = topLeftVertex.Add180Deg();
-                    Edge.TryGetEdge(game.Board, rightVertex, topRightVertex, out Edge? topRightEdge);
-                    Edge.TryGetEdge(game.Board, topLeftVertex, leftVertex, out Edge? topLeftEdge);
+                    Edge.TryGetEdge(board, rightVertex, topRightVertex, out Edge? topRightEdge);
+                    Edge.TryGetEdge(board, topLeftVertex, leftVertex, out Edge? topLeftEdge);
 
                     if (topRightEdge == null || topLeftEdge == null)
                     {
                         return "Failed to print board.";
                     }
 
-                    builder.Append(HexToStringConverter.BottomRightToString(topLeftHex, sideEdgeSize, sideEdgeIndex));
-                    builder.Append(EdgeToStringConverter.SideEdgeToString(topLeftEdge, sideEdgeSize, sideEdgeIndex));
-                    builder.Append(HexToStringConverter.TopToString(currentHex, sideEdgeSize, flatEdgeSize, sideEdgeIndex));
-                    builder.Append(EdgeToStringConverter.SideEdgeToString(topRightEdge, sideEdgeSize, sideEdgeIndex));
-                    builder.Append(HexToStringConverter.BottomLeftToString(topRightHex, sideEdgeSize, flatEdgeSize, sideEdgeIndex));
+                    builder.Append(HexToStringConverter.BottomRightToString(topLeftHex, sideEdgeSize, sideEdgeIndex, board));
+                    builder.Append(EdgeToStringConverter.SideEdgeToString(topLeftEdge, sideEdgeSize, sideEdgeIndex, board));
+                    builder.Append(HexToStringConverter.TopToString(currentHex, sideEdgeSize, flatEdgeSize, sideEdgeIndex, board));
+                    builder.Append(EdgeToStringConverter.SideEdgeToString(topRightEdge, sideEdgeSize, sideEdgeIndex, board));
+                    builder.Append(HexToStringConverter.BottomLeftToString(topRightHex, sideEdgeSize, flatEdgeSize, sideEdgeIndex, board));
 
                     currentHex = currentHex.Add0Deg().Add0Deg().Add0Deg();
                 }
@@ -126,17 +126,17 @@ public class BoardToStringConverter : IBoardToStringConverter
                 FlatTopCoordinate rightVertex = currentHex.Add0Deg();
                 FlatTopCoordinate leftVertex = currentHex.Add180Deg();
                 FlatTopCoordinate farRightVertex = rightVertex.Add0Deg();
-                Edge.TryGetEdge(game.Board, rightVertex, farRightVertex, out Edge? farRightEdge);
+                Edge.TryGetEdge(board, rightVertex, farRightVertex, out Edge? farRightEdge);
 
                 if (farRightEdge == null)
                 {
                     return "Failed to print board.";
                 }
 
-                builder.Append(VertexToStringConverter.ToString(leftVertex));
-                builder.Append(HexToStringConverter.MiddleToString(currentHex, sideEdgeSize, flatEdgeSize));
-                builder.Append(VertexToStringConverter.ToString(rightVertex));
-                builder.Append(EdgeToStringConverter.FlatEdgeToString(farRightEdge, flatEdgeSize));
+                builder.Append(VertexToStringConverter.ToString(leftVertex, board));
+                builder.Append(HexToStringConverter.MiddleToString(currentHex, sideEdgeSize, flatEdgeSize, board));
+                builder.Append(VertexToStringConverter.ToString(rightVertex, board));
+                builder.Append(EdgeToStringConverter.FlatEdgeToString(farRightEdge, flatEdgeSize, board));
 
                 currentHex = currentHex.Add0Deg().Add0Deg().Add0Deg();
             }
@@ -155,19 +155,19 @@ public class BoardToStringConverter : IBoardToStringConverter
                     FlatTopCoordinate bottomRightVertex = currentHex.Add300Deg();
                     FlatTopCoordinate bottomLeftHex = bottomLeftVertex.Add180Deg();
                     FlatTopCoordinate bottomRightHex = bottomRightVertex.Add0Deg();
-                    Edge.TryGetEdge(game.Board, leftVertex, bottomLeftVertex, out Edge? bottomLeftEdge);
-                    Edge.TryGetEdge(game.Board, bottomRightVertex, rightVertex, out Edge? bottomRightEdge);
+                    Edge.TryGetEdge(board, leftVertex, bottomLeftVertex, out Edge? bottomLeftEdge);
+                    Edge.TryGetEdge(board, bottomRightVertex, rightVertex, out Edge? bottomRightEdge);
 
                     if (bottomLeftEdge == null || bottomRightEdge == null)
                     {
                         return "Failed to print board";
                     }
 
-                    builder.Append(HexToStringConverter.TopRightToString(bottomLeftHex, sideEdgeSize, sideEdgeIndex));
-                    builder.Append(EdgeToStringConverter.SideEdgeToString(bottomLeftEdge, sideEdgeSize, sideEdgeIndex));
-                    builder.Append(HexToStringConverter.BottomToString(currentHex, sideEdgeSize, flatEdgeSize, sideEdgeIndex));
-                    builder.Append(EdgeToStringConverter.SideEdgeToString(bottomRightEdge, sideEdgeSize, sideEdgeIndex));
-                    builder.Append(HexToStringConverter.TopLeftToString(bottomRightHex, sideEdgeSize, flatEdgeSize, sideEdgeIndex));
+                    builder.Append(HexToStringConverter.TopRightToString(bottomLeftHex, sideEdgeSize, sideEdgeIndex, board));
+                    builder.Append(EdgeToStringConverter.SideEdgeToString(bottomLeftEdge, sideEdgeSize, sideEdgeIndex, board));
+                    builder.Append(HexToStringConverter.BottomToString(currentHex, sideEdgeSize, flatEdgeSize, sideEdgeIndex, board));
+                    builder.Append(EdgeToStringConverter.SideEdgeToString(bottomRightEdge, sideEdgeSize, sideEdgeIndex, board));
+                    builder.Append(HexToStringConverter.TopLeftToString(bottomRightHex, sideEdgeSize, flatEdgeSize, sideEdgeIndex, board));
 
                     currentHex = currentHex.Add0Deg().Add0Deg().Add0Deg();
                 }

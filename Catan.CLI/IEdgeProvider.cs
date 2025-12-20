@@ -4,5 +4,5 @@ namespace Catan.CLI;
 
 public interface IEdgeProvider
 {
-  Edge GetEdge();
+    Edge GetEdge(Board board);
 }

@@ -4,5 +4,5 @@ namespace Catan.CLI;
 
 public interface ICommandProvider
 {
-  Command? GetCommand();
+    Command? GetCommand(Game game);
 }

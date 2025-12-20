@@ -4,5 +4,5 @@ namespace Catan.CLI;
 
 public interface IVertexProvider
 {
-  FlatTopCoordinate GetVertex();
+    FlatTopCoordinate GetVertex(Board board);
 }

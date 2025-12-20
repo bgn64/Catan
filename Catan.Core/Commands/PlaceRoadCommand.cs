@@ -35,8 +35,6 @@ public class PlaceRoadCommand : Command
 
     protected override bool TryExecuteCore(Game game)
     {
-        Console.WriteLine($"Selected edge {Edge.Coordinate1}, {Edge.Coordinate2}");
-        Console.WriteLine($"CanExecute: {CanExecute(game)}");
         return CanExecuteCore(game) &&
             game.TryGetUnplayedRoad(game.CurrentPlayer, out Road? road) &&
             game.Board.TryPlaceRoad(Edge!, road!);

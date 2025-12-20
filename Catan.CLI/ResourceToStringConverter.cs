@@ -5,15 +5,8 @@ namespace Catan.CLI;
 
 public class ResourceToStringConverter : IHexToStringConverter
 {
-    Game _game;
-
-    public ResourceToStringConverter(Game game)
-    {
-        _game = game;
-    }
-
     public string TopLeftToString(FlatTopCoordinate hex,
-        int sideEdgeSize, int flatEdgeSize, int sideEdgeIndex)
+            int sideEdgeSize, int flatEdgeSize, int sideEdgeIndex, Board board)
     {
         StringBuilder builder = new StringBuilder();
 
@@ -26,7 +19,7 @@ public class ResourceToStringConverter : IHexToStringConverter
     }
 
     public string TopRightToString(FlatTopCoordinate hex,
-        int sideEdgeSize, int sideEdgeIndex)
+            int sideEdgeSize, int sideEdgeIndex, Board board)
     {
         StringBuilder builder = new StringBuilder();
 
@@ -39,7 +32,7 @@ public class ResourceToStringConverter : IHexToStringConverter
     }
 
     public string MiddleLeftToString(FlatTopCoordinate hex,
-        int sideEdgeSize, int flatEdgeSize)
+            int sideEdgeSize, int flatEdgeSize, Board board)
     {
         StringBuilder builder = new StringBuilder();
 
@@ -52,7 +45,7 @@ public class ResourceToStringConverter : IHexToStringConverter
     }
 
     public string MiddleRightToString(FlatTopCoordinate coordinate,
-        int sideEdgeSize)
+            int sideEdgeSize, Board board)
     {
         StringBuilder builder = new StringBuilder();
 
@@ -65,7 +58,7 @@ public class ResourceToStringConverter : IHexToStringConverter
     }
 
     public string BottomLeftToString(FlatTopCoordinate hex,
-        int sideEdgeSize, int flatEdgeSize, int sideEdgeIndex)
+            int sideEdgeSize, int flatEdgeSize, int sideEdgeIndex, Board board)
     {
         StringBuilder builder = new StringBuilder();
 
@@ -78,7 +71,7 @@ public class ResourceToStringConverter : IHexToStringConverter
     }
 
     public string BottomRightToString(FlatTopCoordinate hex,
-        int sideEdgeSize, int sideEdgeIndex)
+            int sideEdgeSize, int sideEdgeIndex, Board board)
     {
         StringBuilder builder = new StringBuilder();
 
@@ -91,7 +84,7 @@ public class ResourceToStringConverter : IHexToStringConverter
     }
 
     public string TopToString(FlatTopCoordinate hex,
-        int sideEdgeSize, int flatEdgeSize, int sideEdgeIndex)
+            int sideEdgeSize, int flatEdgeSize, int sideEdgeIndex, Board board)
     {
         StringBuilder builder = new StringBuilder();
 
@@ -104,7 +97,7 @@ public class ResourceToStringConverter : IHexToStringConverter
     }
 
     public string MiddleToString(FlatTopCoordinate hex,
-        int sideEdgeSize, int flatEdgeSize)
+            int sideEdgeSize, int flatEdgeSize, Board board)
     {
         StringBuilder builder = new StringBuilder();
 
@@ -117,7 +110,7 @@ public class ResourceToStringConverter : IHexToStringConverter
     }
 
     public string BottomToString(FlatTopCoordinate hex,
-        int sideEdgeSize, int flatEdgeSize, int sideEdgeIndex)
+            int sideEdgeSize, int flatEdgeSize, int sideEdgeIndex, Board board)
     {
         StringBuilder builder = new StringBuilder();
 

@@ -5,20 +5,18 @@ namespace Catan.CLI;
 
 public class CLICommandSelector : ICommandProvider
 {
-    Game _game;
     ICommandConfigurationService _commandConfigurationService;
     CommandNameProvider _commandNameProvider;
 
-    public CLICommandSelector(Game game, ICommandConfigurationService commandConfigurationService)
+    public CLICommandSelector(ICommandConfigurationService commandConfigurationService)
     {
-        _game = game;
         _commandConfigurationService = commandConfigurationService;
         _commandNameProvider = new CommandNameProvider();
     }
 
-    public Command? GetCommand()
+    public Command? GetCommand(Game game)
     {
-        List<Command> commands = _game.GetValidCommands().ToList();
+        List<Command> commands = game.GetValidCommands().ToList();
 
         if (commands.Count == 0)
         {
@@ -43,7 +41,7 @@ public class CLICommandSelector : ICommandProvider
             input = Console.ReadLine();
         }
 
-        _commandConfigurationService.ConfigureCommand(commands[index]);
+        _commandConfigurationService.ConfigureCommand(commands[index], game);
 
         return commands[index];
     }	

@@ -4,5 +4,5 @@ namespace Catan.CLI;
 
 public interface ICommandConfigurationService
 {
-  void ConfigureCommand(Command command);
+    void ConfigureCommand(Command command, Game game);
 }

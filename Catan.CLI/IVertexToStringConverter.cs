@@ -5,5 +5,5 @@ namespace Catan.CLI;
 
 public interface IVertexToStringConverter
 {
-  string ToString(FlatTopCoordinate vertex);
+    string ToString(FlatTopCoordinate vertex, Board board);
 }

@@ -5,18 +5,11 @@ namespace Catan.CLI;
 
 public class RoadToStringConverter : IEdgeToStringConverter
 {
-    Game _game;
-
-    public RoadToStringConverter(Game game)
-    {
-        _game = game;
-    }
-
-    public string FlatEdgeToString(Edge edge, int flatEdgeSize)
+    public string FlatEdgeToString(Edge edge, int flatEdgeSize, Board board)
     {
         StringBuilder builder = new StringBuilder();
-        bool hexEdgeExists = _game.Board.GetAdjacentHexCoordinates(edge).Any(c => _game.Board.TryGetHex(c, out _));
-        bool roadExists = _game.Board.TryGetRoad(edge, out _);
+        bool hexEdgeExists = board.GetAdjacentHexCoordinates(edge).Any(c => board.TryGetHex(c, out _));
+        bool roadExists = board.TryGetRoad(edge, out _);
 
         for (int i = 0; i < flatEdgeSize; i++)
         {
@@ -37,10 +30,10 @@ public class RoadToStringConverter : IEdgeToStringConverter
         return builder.ToString();
     }
 
-    public string SideEdgeToString(Edge edge, int sideEdgeSize, int sideEdgeIndex)
+    public string SideEdgeToString(Edge edge, int sideEdgeSize, int sideEdgeIndex, Board board)
     {
-        bool hexEdgeExists = _game.Board.GetAdjacentHexCoordinates(edge).Any(c => _game.Board.TryGetHex(c, out _));
-        bool roadExists = _game.Board.TryGetRoad(edge, out _);
+        bool hexEdgeExists = board.GetAdjacentHexCoordinates(edge).Any(c => board.TryGetHex(c, out _));
+        bool roadExists = board.TryGetRoad(edge, out _);
         Console.WriteLine($"roadExists for {edge}: {roadExists}");
 
         if (roadExists && sideEdgeIndex == sideEdgeSize / 2)
