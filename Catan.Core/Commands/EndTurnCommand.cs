@@ -1,6 +1,6 @@
 namespace Catan.Core;
 
-public class RollCommand : Command
+public class EndTurnCommand : Command
 {
     public override bool CanExecute(Game game)
     {
@@ -9,8 +9,6 @@ public class RollCommand : Command
 
     protected override bool TryExecuteCore(Game game)
     {
-        game.RollDice();
-
         return true;
     }
 

@@ -48,7 +48,7 @@ public class Game
 
         _initialRollPhase = new InitialRollPhase(this);
         _initialPlacementPhase = new InitialPlacementPhase(this);
-        _mainGamePhase = new MainGamePhase();
+        _mainGamePhase = new MainGamePhase(this);
 
         _initialRollPhase.Complete += InitialRollPhaseCompletedEventHandler;
         _initialPlacementPhase.Complete += InitialPlacementPhaseCompletedEventHandler;
